@@ -1,12 +1,33 @@
-Plugin boilerplate
-==================
+Themosis Cache
+==============
 
-The Themosis framework plugin boilerplate.
+A WordPress plugin for the Themosis framework that implements the illuminate/cache
+package and provides a default store driver built on the back of WP_Object_Cache.
 
-Download this repository in order to develop your own WordPress plugin by leveraging
-the Themosis framework API.
+Install
+-------
+Install through composer: -
 
-Easily extends WordPress. Build administration features, define front-end custom routes,
-add custom API endpoints,... all from the plugin.
+`composer require djgadd/themosis-cache`
 
-[Read the documentation](http://framework.themosis.com/) on the Themosis framework website and start developing your own plugins.
+Activate the plugin in WordPress then add it to your theme's class aliases in the theme.config.php file: -
+
+```
+    'aliases' => [
+	    ...
+	    'Cache' => Com\KeltieCochrane\Cache\Facades\Cache::class,
+```
+
+And you're good to go. Remember, it uses WP_Object_Cache so you'll need an object cache plugin installed (such as http://wordpress.org/plugins/redis-cache/)
+
+Support
+-------
+This plugin is provided as is, though we'll endeavour to help where we can.
+
+Contributing
+------------
+Any contributions would be encouraged and much appreciated, you can contribute by: -
+
+* Reporting bugs
+* Suggesting features
+* Sending pull requests
