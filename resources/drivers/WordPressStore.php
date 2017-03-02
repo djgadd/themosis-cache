@@ -3,10 +3,24 @@
 namespace Com\KeltieCochrane\Cache\Drivers;
 
 use Themosis\Facades\Config;
+use Illuminate\Cache\TagSet;
+use Illuminate\Cache\TaggableStore;
 use Illuminate\Contracts\Cache\Store;
 
-class WordPressStore implements Store
+class WordPressStore extends TaggableStore implements Store
 {
+  /**
+   * The cache group key
+   * @var  string
+   */
+  const CACHE_GROUP_KEY = 'cache-group';
+
+  /**
+   * The prefix to use when generating a uuid to check cache values
+   * @var  string
+   */
+  const CACHE_CHECK_PREFIX = 'cache';
+
   /**
    * A string that should be prepended to keys.
    * @var string
@@ -24,7 +38,7 @@ class WordPressStore implements Store
    *
    * @param  \Memcached  $memcached
    * @param  string  $prefix
-   * @return void
+   * @return  void
    */
   public function __construct (string $prefix = '')
   {
@@ -37,12 +51,12 @@ class WordPressStore implements Store
   /**
    * Retrieve an item from the cache by key.
    * @param  string  $key
-   * @return mixed
+   * @return  mixed
   **/
   public function get ($key)
   {
-    $uuid = uniqid('cache', true);
-    $value = wp_cache_get($key, $this->prefix, false, $uuid);
+    $uuid = uniqid(self::CACHE_CHECK_PREFIX, true);
+    $value = wp_cache_get($key, $this->getPrefix(), false, $uuid);
 
     if ($value !== $uuid) {
       return $value;
@@ -53,7 +67,7 @@ class WordPressStore implements Store
    * Retrieve multiple items from the cache by key. Items not found in the cache
    * will have a null value.
    * @param  array  $keys
-   * @return array
+   * @return  array
   **/
   public function many (array $keys)
   {
@@ -71,18 +85,18 @@ class WordPressStore implements Store
    * @param  string  $key
    * @param  mixed   $value
    * @param  float|int  $minutes
-   * @return void
+   * @return  void
   **/
   public function put ($key, $value, $minutes)
   {
-    wp_cache_set($key, $value, $this->prefix, ceil($minutes * 60));
+    wp_cache_set($key, $value, $this->getPrefix(), ceil($minutes * 60));
   }
 
   /**
    * Store multiple items in the cache for a given number of minutes.
    * @param  array  $values
    * @param  float|int  $minutes
-   * @return void
+   * @return  void
    */
   public function putMany (array $values, $minutes)
   {
@@ -96,11 +110,11 @@ class WordPressStore implements Store
    * @param  string  $key
    * @param  mixed   $value
    * @param  float|int  $minutes
-   * @return bool
+   * @return  bool
   **/
   public function add ($key, $value, $minutes)
   {
-    return wp_cache_add($key, $value, $this->prefix, ceil($minutes * 60));
+    return wp_cache_add($key, $value, $this->getPrefix(), ceil($minutes * 60));
   }
 
   /**
@@ -108,31 +122,31 @@ class WordPressStore implements Store
    *
    * @param  string  $key
    * @param  mixed   $value
-   * @return int|bool
+   * @return  int|bool
   **/
   public function increment ($key, $value = 1)
   {
     $value = $this->get($key) + $value;
-    return wp_cache_replace($key, $value, $this->prefix, $this->ttl);
+    return wp_cache_replace($key, $value, $this->getPrefix(), $this->ttl);
   }
 
   /**
    * Decrement the value of an item in the cache.
    * @param  string  $key
    * @param  mixed   $value
-   * @return int|bool
+   * @return  int|bool
   **/
   public function decrement ($key, $value = 1)
   {
     $value = $this->get($key) - $value;
-    return wp_cache_replace($key, $value, $this->prefix, $this->ttl);
+    return wp_cache_replace($key, $value, $this->getPrefix(), $this->ttl);
   }
 
   /**
    * Store an item in the cache indefinitely.
    * @param  string  $key
    * @param  mixed   $value
-   * @return void
+   * @return  void
   **/
   public function forever ($key, $value)
   {
@@ -142,38 +156,75 @@ class WordPressStore implements Store
   /**
    * Remove an item from the cache.
    * @param  string  $key
-   * @return bool
+   * @return  bool
   **/
   public function forget ($key)
   {
-    wp_cache_delete($key, $this->prefix);
+    wp_cache_delete($key, $this->getPrefix());
   }
 
   /**
    * Remove all items from the cache.
-   * @return bool
+   * @return  bool
   **/
   public function flush ()
   {
+    $this->setPrefix($this->prefix);
+    return true;
+  }
+
+  /**
+   * Remove items from the entire cache, beware that this will clear ALL wp caches
+   * @return  bool
+   */
+  public function flushAll()
+  {
+    // Should only display on local
+    trigger_error('Notice: Cache::flushAll() will clear the whole WordPress cache, not just data for this instance.', E_USER_NOTICE);
     return wp_cache_flush();
   }
 
   /**
    * Get the cache key prefix.
-   * @return string
+   * @return  string
   **/
   public function getPrefix ()
   {
-    return $this->prefix;
+    $uuid = uniqid(self::CACHE_CHECK_PREFIX, true);
+    $prefix = wp_cache_get($this->prefix, self::CACHE_GROUP_KEY, false, $uuid);
+
+    if ($prefix !== $uuid) {
+      return $prefix;
+    }
+
+    $this->setPrefix($this->prefix);
+    return $this->getPrefix();
   }
 
   /**
    * Set the cache key prefix.
    * @param  string  $prefix
-   * @return void
+   * @return  void
   **/
   public function setPrefix ($prefix)
   {
-    $this->prefix = !empty($prefix) ? $prefix : '';
+    global $wpdb;
+
+    $this->prefix = !empty($prefix) ? $prefix : $wpdb->prefix;
+
+    // We use an internal pointer so that we can have seperate cache managers that can flush with expected behaviour
+    wp_cache_set($prefix, uniqid($prefix, true), self::CACHE_GROUP_KEY, 0);
+  }
+
+  /**
+   * begin executing a new tags operation
+   * @param  array|mixed  $names
+   * @return   \Illuminate\Cache\RedisTaggedCache
+   */
+  public function tags ($names)
+  {
+    return new WordPressTaggedCache(
+      $this, new TagSet($this, is_array($names) ? $names : func_get_args())
+    );
   }
 }
