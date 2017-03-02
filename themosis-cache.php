@@ -4,7 +4,7 @@
  * Plugin Name: Themosis Cache
  * Plugin URI: https://keltiecochrane.com
  * Description: A plugin that provides a cache wrapper for developers.
- * Version: 0.0.1
+ * Version: 0.1.0
  * Author: Daniel Gadd @ Keltie Cochrane Ltd.
  * Author URI: https://keltiecochrane.com
  * Text Domain: themosis-cache.
