@@ -8,7 +8,7 @@ Install
 -------
 Install through composer: -
 
-`composer require djgadd/themosis-cache`
+`composer require keltiecochrane/themosis-cache`
 
 Activate the plugin in WordPress then add it to your theme's class aliases in the theme.config.php file: -
 
