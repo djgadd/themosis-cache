@@ -126,8 +126,7 @@ class WordPressStore extends TaggableStore implements Store
   **/
   public function increment ($key, $value = 1)
   {
-    $value = $this->get($key) + $value;
-    return wp_cache_replace($key, $value, $this->getPrefix(), $this->ttl);
+    wp_cache_incr($key, $value, $this->getPrefix());
   }
 
   /**
@@ -138,8 +137,7 @@ class WordPressStore extends TaggableStore implements Store
   **/
   public function decrement ($key, $value = 1)
   {
-    $value = $this->get($key) - $value;
-    return wp_cache_replace($key, $value, $this->getPrefix(), $this->ttl);
+    wp_cache_decr($key, $value, $this->getPrefix());
   }
 
   /**
