@@ -10,13 +10,8 @@ Install through composer: -
 
 `composer require keltiecochrane/themosis-cache`
 
-Activate the plugin in WordPress then add it to your theme's class aliases in the theme.config.php file: -
-
-```
-    'aliases' => [
-	    ...
-	    'Cache' => Com\KeltieCochrane\Cache\Facades\Cache::class,
-```
+Activate the plugin in WordPress and that's it. See the
+[Laravel Documentation](http://laravel.com/docs/5.4/cache) for further info.
 
 And you're good to go. Remember, it uses WP_Object_Cache so you'll need an object cache plugin installed (such as http://wordpress.org/plugins/redis-cache/)
 
