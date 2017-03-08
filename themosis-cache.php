@@ -138,3 +138,6 @@ container('action')->add('plugins_loaded', function () use ($vars) {
 /*
  * Add extra features below.
  */
+
+// Add an alias to the facade
+class_alias(Com\KeltieCochrane\Cache\Facades\Cache::class, 'Cache');
