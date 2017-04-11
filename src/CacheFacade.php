@@ -1,10 +1,10 @@
 <?php
 
-namespace Com\KeltieCochrane\Cache\Facades;
+namespace KeltieCochrane\Cache;
 
 use Themosis\Facades\Facade;
 
-class Cache extends Facade
+class CacheFacade extends Facade
 {
   /**
    * Get the registered name of the component.

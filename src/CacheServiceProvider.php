@@ -1,14 +1,13 @@
 <?php
 
-namespace Com\KeltieCochrane\Cache\Services;
+namespace KeltieCochrane\Cache;
 
-use Themosis\Facades\Config;
 use Illuminate\Cache\CacheManager;
+use KeltieCochrane\Cache\CacheFacade;
 use Themosis\Foundation\ServiceProvider;
-use Com\KeltieCochrane\Cache\Facades\Cache;
-use Com\KeltieCochrane\Cache\Drivers\WordPressStore;
+use KeltieCochrane\Cache\Drivers\WordPressStore;
 
-class CacheService extends ServiceProvider
+class CacheServiceProvider extends ServiceProvider
 {
   /**
    * Perform post-registration booting of services.
@@ -16,8 +15,8 @@ class CacheService extends ServiceProvider
   **/
   public function boot ()
   {
-    Cache::extend('wordpress', function ($app) {
-      return Cache::repository(new WordPressStore);
+    CacheFacade::extend('wordpress', function ($app) {
+      return CacheFacade::repository(new WordPressStore);
     });
   }
 

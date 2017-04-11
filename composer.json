@@ -1,6 +1,6 @@
 {
   "name": "keltiecochrane/themosis-cache",
-  "description": "A themosis plugin that implements the illuminate/cache packing with a WP_Object_Cache driver",
+  "description": "The illuminate/cache package for Themosis backed by WP_Object_Cache.",
   "keywords": ["themosis", "plugin"],
   "authors": [
     {
@@ -14,7 +14,6 @@
       "homepage": "https://keltiecochrane.com"
     }
   ],
-  "type": "wordpress-plugin",
   "repositories": [
     {
       "type": "composer",
@@ -25,5 +24,10 @@
     "php": ">=7.0",
     "composer/installers": "~1.2",
     "illuminate/cache": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "KeltieCochrane\\Cache\\": "./src/"
+    }
   }
 }
