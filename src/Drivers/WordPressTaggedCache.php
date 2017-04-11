@@ -1,6 +1,6 @@
 <?php
 
-namespace Com\KeltieCochrane\Cache\Drivers;
+namespace KeltieCochrane\Cache\Drivers;
 
 use Illuminate\Cache\TagSet;
 use Illuminate\Cache\TaggedCache;

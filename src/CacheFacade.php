@@ -1,6 +1,6 @@
 <?php
 
-namespace Com\KeltieCochrane\Cache\Facades;
+namespace KeltieCochrane\Cache;
 
 use Themosis\Facades\Facade;
 
