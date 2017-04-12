@@ -2,7 +2,6 @@
 
 namespace KeltieCochrane\Cache\Drivers;
 
-use Themosis\Facades\Config;
 use Illuminate\Cache\TagSet;
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Contracts\Cache\Store;
@@ -49,7 +48,7 @@ class WordPressStore extends TaggableStore implements Store
   public function __construct (string $prefix = '')
   {
     $this->setPrefix($prefix);
-    $this->ttl = Config::get('cache.stores.wordpress.ttl') ?: static::DEFAULT_TTL;
+    $this->ttl = container('config')->get('cache.stores.wordpress.ttl', static::DEFAULT_TTL);
   }
 
   /**
