@@ -1,13 +1,11 @@
-#Themosis Cache
-A ServiceProvider that implements `illuminate/cache` for Themosis and provides a
-default store driver built on the back of WP_Object_Cache. Requires `keltiecochrane/themosis-illuminate` implementation of `illuminate/config` for ArrayAccess on `app('config')`
+# Themosis Cache
+A package from the Themosis framework that implements `illuminate/cache` with a WP_Object_Cache backed driver. Requires `keltiecochrane/themosis-illuminate`'s ConfigServiceProvider to be setup.
 
 ## Install
 Install through composer: -
 `composer require keltiecochrane/themosis-cache`
 
-Copy the `config/cache.config.php` to your `theme/resources/config` directory,
-and configure as appropriate.
+Copy the `config/cache.config.php` to your `theme/resources/config` directory, and configure as appropriate.
 
 Register the service provider in your `theme/resources/config/providers.php` file: -
 `KeltieCochrane\Cache\CacheServiceProvider::class,`
