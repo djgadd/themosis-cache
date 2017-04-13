@@ -1,6 +1,7 @@
 {
   "name": "keltiecochrane/themosis-cache",
   "description": "The illuminate/cache package for Themosis backed by WP_Object_Cache.",
+  "license": "GPL-3.0",
   "keywords": ["themosis", "plugin"],
   "authors": [
     {
@@ -23,11 +24,16 @@
   "require": {
     "php": ">=7.0",
     "composer/installers": "~1.2",
+    "themosis/framework": "^1.3",
+    "keltiecochrane/themosis-illuminate": "^1.0",
     "illuminate/cache": "^5.4"
   },
   "autoload": {
     "psr-4": {
       "KeltieCochrane\\Cache\\": "./src/"
-    }
+    },
+    "files": [
+      "./src/helpers.php"
+    ]
   }
 }

@@ -13,7 +13,7 @@ return [
   | Supported: "apc", "array", "database", "file", "memcached", "redis"
   |
   */
-  'default' => getenv('CACHE_DRIVER') ?: 'wordpress',
+  'default' => env('CACHE_DRIVER', 'wordpress'),
 
   /*
   |--------------------------------------------------------------------------
@@ -42,5 +42,5 @@ return [
   | value to get prefixed to all our keys so we can avoid collisions.
   |
   */
-  'prefix' => 'themosis',
+  'prefix' => env('CACHE_PREFIX', 'themosis'),
 ];
