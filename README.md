@@ -1,5 +1,5 @@
 # Themosis Cache
-A package from the Themosis framework that implements `illuminate/cache` with a WP_Object_Cache backed driver. Requires `keltiecochrane/themosis-illuminate`'s ConfigServiceProvider to be setup.
+A package for the Themosis framework that implements `illuminate/cache` with a WP_Object_Cache backed driver. Requires `keltiecochrane/themosis-illuminate`'s ConfigServiceProvider to be setup.
 
 ## Install
 Install through composer: -
