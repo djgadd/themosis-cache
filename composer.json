@@ -1,5 +1,5 @@
 {
-  "name": "keltiecochrane/themosis-cache",
+  "name": "djgadd/themosis-cache",
   "description": "The illuminate/cache package for Themosis backed by WP_Object_Cache.",
   "license": "GPL-3.0",
   "keywords": ["themosis", "plugin"],
